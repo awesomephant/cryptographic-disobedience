@@ -1,0 +1,5 @@
+node_modules/
+screenshots/
+key.txt
+yarn.lock
+*.pdf

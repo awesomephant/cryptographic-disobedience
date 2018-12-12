@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/draggabilly/2.1.1/draggabilly.pkgd.min.js"></script>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <h1><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="#ffffff" d="M8,15A2,2 0 0,1 6,13A2,2 0 0,1 8,11A2,2 0 0,1 10,13A2,2 0 0,1 8,15M10.5,17L12,14L13.5,17H10.5M16,15A2,2 0 0,1 14,13A2,2 0 0,1 16,11A2,2 0 0,1 18,13A2,2 0 0,1 16,15M22,11A10,10 0 0,0 12,1A10,10 0 0,0 2,11C2,13.8 3.2,16.3 5,18.1V22H19V18.1C20.8,16.3 22,13.8 22,11M17,20H15V18H13V20H11V18H9V20H7V17.2C5.2,15.7 4,13.5 4,11A8,8 0 0,1 12,3A8,8 0 0,1 20,11C20,13.5 18.8,15.8 17,17.2V20Z" />
+            </svg>
+            Cryptographic Disobedience</h1>
+        <p>When you put an image on Facebook or other social media, you’re feeding an array of immensely powerful
+            artificial intelligence systems information about how to identify people and how to recognize places and
+            objects, habits and preferences, race, class, and gender identifications, economic statuses, and much more.</p>
+        <h2>References</h2>
+        <ul class="footnotes">
+            <li>Trevor Paglen (2016): <a href="https://thenewinquiry.com/invisible-images-your-pictures-are-looking-at-you/">Invisible
+                    Images (Your Pictures Are Looking at You)</a>. The New Inquiry.</li>
+        </ul>
+    </header>
+
+    <div class="decrypt-output window hidden">
+        <header class="window-header">Result</header>
+        <canvas id="output-decrypt"></canvas>
+    </div>
+    <div class="encrypt-output window hidden">
+        <header class="window-header">Result</header>
+        <canvas id="output"></canvas>
+    </div>
+    <div class="encrypt window">
+        <header class="window-header">Encrypt an Image</header>
+        <main class="window-content">
+            <ul class="window-steps">
+                <li>
+                    <div class='dropzone' id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+                        <p>Drop your image here</p>
+                        <h2 class="image-title"></h2>
+                    </div>
+                </li>
+                <li>
+                    <button class="btn" onclick="handleGenerateKey()">Generate Key</button>
+                    <input type="text" name="generated-key" id="generated-key" />
+                </li>
+                <li>
+                    <button class="btn" onclick="handleEncrypt()">Encrypt</button>
+                </li>
+            </ul>
+            <div class="preview"></div>
+            <canvas width='600' height='800' id="world"></canvas>
+        </main>
+    </div>
+    <div class="decrypt window">
+        <header class="window-header">Decrypt an Image</header>
+        <ul class="window-steps">
+            <li>
+                <div class='dropzone' id="drop_zone" ondrop="dropHandlerDecrypt(event);" ondragover="dragOverHandler(event);">
+                    <p>Drop your image here</p>
+                    <h2 class="image-title"></h2>
+                </div>
+                <div class="preview"></div>
+                <canvas width='600' height='800' id="world"></canvas>
+            </li>
+            <li>
+                <h2>Enter a key</h2>
+                <input type="text" id="enter-key">
+            </li>
+            <li>
+                <button class="btn" onclick="handleDecrypt()">Decrypt</button>
+            </li>
+        </ul>
+    </div>
+    <script>
+        var encryptWindow = document.querySelector('.window.encrypt')
+        var decryptWindow = document.querySelector('.window.decrypt')
+        function spawnWindow(data) {
+            var html = `<header class='window-header'>${data.title}</header>`;
+            var el = document.createElement('div');
+            el.innerHTML = html;
+            initWindow(el);
+            el.classList.add('window')
+            el.classList.add('draggable')
+            el.style.width = data.width + 'px';
+            el.style.height = data.height + 'px';
+            el.style.left = data.x + 'px';
+            el.style.top = data.y + 'px';
+            el.style.position = 'absolute';
+            topZIndex += 1;
+            el.style.zIndex = topZIndex;
+            document.body.appendChild(el);
+        }
+        function dropHandler(ev) {
+            ev.preventDefault();
+            let preview = document.querySelector('.encrypt .preview')
+            if (ev.dataTransfer.items) {
+                // Use DataTransferItemList interface to access the file(s)
+                for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+                    // If dropped items aren't files, reject them
+                    if (ev.dataTransfer.items[i].kind === 'file') {
+                        let fileNameEl = document.querySelector('.encrypt .image-title')
+                        encryptWindow.classList.add('hasFile')
+                        var file = ev.dataTransfer.items[i].getAsFile();
+                        console.log('... file[' + i + '].name = ' + file.name);
+                        fileNameEl.innerHTML = file.name;
+                        var img = document.createElement("img");
+                        img.classList.add("source");
+                        img.file = file;
+                        preview.innerHTML = '';
+                        preview.appendChild(img);
+                        var reader = new FileReader();
+                        reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(img);
+                        reader.readAsDataURL(file);
+                    }
+                }
+            }
+            removeDragData(ev)
+        }
+        function dropHandlerDecrypt(ev) {
+            ev.preventDefault();
+            let preview = document.querySelector('.decrypt .preview')
+            if (ev.dataTransfer.items) {
+                // Use DataTransferItemList interface to access the file(s)
+                for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+                    // If dropped items aren't files, reject them
+                    if (ev.dataTransfer.items[i].kind === 'file') {
+                        var file = ev.dataTransfer.items[i].getAsFile();
+                        let fileNameEl = document.querySelector('.decrypt .image-title')
+                        decryptWindow.classList.add('hasFile')
+                        fileNameEl.innerHTML = file.name;
+                        console.log('... file[' + i + '].name = ' + file.name);
+                        var img = document.createElement("img");
+                        img.classList.add("source-decrypt");
+                        img.file = file;
+                        preview.innerHTML = '';
+                        preview.appendChild(img);
+                        var reader = new FileReader();
+                        reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(img);
+                        reader.readAsDataURL(file);
+                    }
+                }
+            }
+            removeDragData(ev)
+        }
+
+        function dragOverHandler(ev) {
+            console.log('File(s) in drop zone');
+
+            // Prevent default behavior (Prevent file from being opened)
+            ev.preventDefault();
+        }
+        function removeDragData(ev) {
+            console.log('Removing drag data');
+
+            if (ev.dataTransfer.items) {
+                // Use DataTransferItemList interface to remove the drag data
+                ev.dataTransfer.items.clear();
+            } else {
+                // Use DataTransfer interface to remove the drag data
+                ev.dataTransfer.clearData();
+            }
+        }
+        function handleGenerateKey() {
+            let key = generateKey(30, 100, 'random');
+            console.log('hi')
+            let outputEl = document.querySelector('#generated-key')
+            outputEl.value = JSON.stringify(key);
+
+        }
+        function handleEncrypt() {
+            let outputEl = document.querySelector('#generated-key')
+            let key = JSON.parse(outputEl.value)
+            encodeImage(key)
+        }
+        function handleDecrypt() {
+            let outputEl = document.querySelector('#enter-key')
+            let key = JSON.parse(outputEl.value)
+            decodeImage(key)
+        }
+
+        window.onload = function () {
+            // if you have multiple .draggable elements
+            // get all draggie elements
+            var draggableElems = document.querySelectorAll(".window");
+            // array of Draggabillies
+            var draggies = [];
+            // init Draggabillies
+            for (var i = 0, len = draggableElems.length; i < len; i++) {
+                var draggableElem = draggableElems[i];
+                var draggie = new Draggabilly(draggableElem, {
+                    handle: ".window-header"
+                });
+                draggies.push(draggie);
+            }
+            var activeWindow = document.querySelector('.window');
+            var windows = document.querySelectorAll(".window");
+
+            for (var i = 0; i < windows.length; i++) {
+                var w = windows[i];
+                w.addEventListener("mousedown", function (e) {
+                    activeWindow.style.zIndex = 0;
+                    activeWindow = e.srcElement.closest('.window');
+                    activeWindow.style.zIndex = 10;
+                })
+            }
+        }
+
+    </script>
+</body>
+
+</html>

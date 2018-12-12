@@ -1,0 +1,16 @@
+{
+    "name": "dissertation",
+    "description": "",
+    "authors": "Max Kohler",
+    "version": "1.0.0",
+    "main": "",
+    "dependencies": {
+        "grunt": "*",
+        "node-sass": "*",
+        "grunt-sass": "*",
+        "grunt-contrib-watch": "*",
+        "grunt-browser-sync": "*",
+        "grunt-postcss": "*",
+        "autoprefixer": "*"
+    }
+}

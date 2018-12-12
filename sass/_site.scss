@@ -1,0 +1,116 @@
+body {
+    background: $black;
+    color: white;
+    padding: 1vh 1vw;
+    font-family: $sans;
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+}
+
+#world, .preview {
+    visibility: hidden;
+    position: absolute;
+}
+
+.site-header {
+    font-size: calc(1rem + 1vw);
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    svg {
+        width: 1.2em;
+        position: relative;
+        top: .05em;
+    }
+    h2 {
+        font-size: 1.1rem;
+        padding-top: 1rem;
+    }
+}
+
+.footnotes {
+    font-size: 1.1rem;
+    list-style: none;
+}
+
+.window {
+    border: 1px solid white;
+    border-radius: 2px;
+    width: 60%;
+    display: inline-block;
+    background: $black;
+    position: absolute;
+    &.hidden {
+        visibility: hidden;
+    }
+    input[type=text]{
+        border: 1px solid white;
+        background: none;
+        appearance: none;
+        width: 100%;
+        padding: .2rem;
+        font-size: 2rem;
+        color: white;
+        &:focus {
+            outline: 0;
+            box-shadow: 0;
+        }
+    }
+    &.encrypt {
+        top: 20rem;
+        left: 5rem;
+    }
+    &.decrypt {
+        top: 40rem;
+        right: 15rem;
+    }
+}
+
+.window-steps {
+    list-style: none;
+    li {
+        padding: 1rem;
+    }
+}
+
+.window-header {
+    border-bottom: 1px solid white;
+    padding: .5rem;
+}
+
+.window-content {
+    padding: .5rem;
+    h2 {
+        margin-bottom: 1rem;
+    }
+}
+
+.dropzone {
+    height: 20vh;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    h2 {
+        font-size: 2rem;
+    }
+    p {
+        text-align: center;
+    }
+}
+.hasFile .dropzone p {
+    display: none;
+}
+.btn {
+    appearance: none;
+    background: none;
+    border: 1px solid white;
+    display: block;
+    font-size: 2rem;
+    margin-bottom: .5rem;
+    color: white;
+    border-radius: 2px;
+    padding: 1rem;
+}
