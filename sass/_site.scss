@@ -6,6 +6,9 @@ body {
     overflow-x: hidden;
 }
 
+input::-moz-selection { background: white;color: $black }
+input::selection { background: white; opacity: 1; color: $black;}
+
 a {
     color: inherit;
 }

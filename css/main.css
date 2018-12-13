@@ -12,6 +12,15 @@ body {
   font-family: "Suisse Int'l", sans-serif;
   overflow-x: hidden; }
 
+input::-moz-selection {
+  background: white;
+  color: #141414; }
+
+input::selection {
+  background: white;
+  opacity: 1;
+  color: #141414; }
+
 a {
   color: inherit; }
 
