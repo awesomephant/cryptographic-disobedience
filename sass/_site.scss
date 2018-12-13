@@ -27,16 +27,39 @@ a {
         position: relative;
         top: .05em;
     }
+    p {
+        text-indent: 1em;
+    }
     h2 {
         font-size: 1.1rem;
         padding-top: 1rem;
+        padding-bottom: .25rem;
     }
+}
+
+.footnote {
+    border: 1px solid white;
+    border-radius: 100%;
+    padding: .3em;
+    margin: -.1em;
+    font-feature-settings: "tnum";
 }
 
 .footnotes {
     font-size: 1.1rem;
     list-style: none;
+    counter-reset: ref;
+    li {
+        margin-bottom: .2em;
+        counter-increment: ref;
+        &:before {
+            font-feature-settings: "tnum";
+            margin-right: 1em;
+            content: counter(ref)
+        }
+    }
 }
+
 
 .window {
     border: 1px solid white;

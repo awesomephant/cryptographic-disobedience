@@ -36,13 +36,33 @@ a {
     width: 1.2em;
     position: relative;
     top: .05em; }
+  .site-header p {
+    text-indent: 1em; }
   .site-header h2 {
     font-size: 1.1rem;
-    padding-top: 1rem; }
+    padding-top: 1rem;
+    padding-bottom: .25rem; }
+
+.footnote {
+  border: 1px solid white;
+  border-radius: 100%;
+  padding: .3em;
+  margin: -.1em;
+  -webkit-font-feature-settings: "tnum";
+          font-feature-settings: "tnum"; }
 
 .footnotes {
   font-size: 1.1rem;
-  list-style: none; }
+  list-style: none;
+  counter-reset: ref; }
+  .footnotes li {
+    margin-bottom: .2em;
+    counter-increment: ref; }
+    .footnotes li:before {
+      -webkit-font-feature-settings: "tnum";
+              font-feature-settings: "tnum";
+      margin-right: 1em;
+      content: counter(ref); }
 
 .window {
   border: 1px solid white;
