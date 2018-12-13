@@ -80,6 +80,7 @@
     <script>
         var encryptWindow = document.querySelector('.window.encrypt')
         var decryptWindow = document.querySelector('.window.decrypt')
+
         function spawnWindow(data) {
             var html = `<header class='window-header'>${data.title}</header>`;
             var el = document.createElement('div');
@@ -166,24 +167,42 @@
                 ev.dataTransfer.clearData();
             }
         }
+        function keyToPlainText(key) {
+            let s = ''
+            s += key.n + ' ';
+            s += key.transform.join(' ')
+            return s;
+        }
+        function plainTextToKey(s) {
+            let arr = s.split(' ');
+            let key = {
+                n: 0,
+                transform: []
+            }
+            key.n = arr[0]
+            key.transform = arr.slice(1)
+            for (let i = 0; i < key.transform.length; i++){
+                key.transform[i] *= 1;
+            }
+            return key;
+        }
+
         function handleGenerateKey() {
             let key = generateKey(30, 100, 'random');
             console.log('hi')
             let outputEl = document.querySelector('#generated-key')
-            outputEl.value = JSON.stringify(key);
-
+            outputEl.value = keyToPlainText(key);
         }
         function handleEncrypt() {
             let outputEl = document.querySelector('#generated-key')
-            let key = JSON.parse(outputEl.value)
+            let key = plainTextToKey(outputEl.value);
             encodeImage(key)
         }
         function handleDecrypt() {
             let outputEl = document.querySelector('#enter-key')
-            let key = JSON.parse(outputEl.value)
+            let key = plainTextToKey(outputEl.value)
             decodeImage(key)
         }
-
         window.onload = function () {
             // if you have multiple .draggable elements
             // get all draggie elements
