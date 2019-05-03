@@ -6,7 +6,7 @@
   font-weight: normal; }
 
 body {
-  background: #141414;
+  background: #020202;
   color: white;
   padding: 1vh 1vw;
   font-family: "Suisse Int'l", sans-serif;
@@ -14,12 +14,12 @@ body {
 
 input::-moz-selection {
   background: white;
-  color: #141414; }
+  color: #020202; }
 
 input::selection {
   background: white;
   opacity: 1;
-  color: #141414; }
+  color: #020202; }
 
 a {
   color: inherit; }
@@ -31,13 +31,19 @@ a {
 .site-header {
   font-size: calc(1rem + 1vw);
   line-height: 1.2;
-  margin-bottom: 2rem; }
+  margin-bottom: 2rem;
+  max-width: 30em; }
   .site-header svg {
     width: 1.2em;
     position: relative;
     top: .05em; }
+  .site-header h1 {
+    text-indent: 2em;
+    margin-bottom: .5em; }
+  .site-header h2 {
+    text-indent: 1.6em; }
   .site-header p {
-    text-indent: 1em; }
+    text-indent: 2em; }
   .site-header h2 {
     font-size: 1.1rem;
     padding-top: 1rem;
@@ -69,7 +75,7 @@ a {
   border-radius: 2px;
   width: 60%;
   display: inline-block;
-  background: #141414;
+  background: #020202;
   position: absolute; }
   .window.hidden {
     visibility: hidden; }

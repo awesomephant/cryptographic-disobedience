@@ -22,13 +22,21 @@ a {
     font-size: calc(1rem + 1vw);
     line-height: 1.2;
     margin-bottom: 2rem;
+    max-width: 30em;
     svg {
         width: 1.2em;
         position: relative;
         top: .05em;
     }
+    h1 {
+        text-indent: 2em;
+        margin-bottom: .5em;
+    }
+    h2 {
+        text-indent: 1.6em;
+    }
     p {
-        text-indent: 1em;
+        text-indent: 2em;
     }
     h2 {
         font-size: 1.1rem;
